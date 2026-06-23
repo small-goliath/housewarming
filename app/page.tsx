@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { DDay } from "@/components/d-day"
 import { cn } from "@/lib/utils"
 
 /* 집들이 소개 포인트 카드 데이터 */
@@ -63,11 +64,16 @@ export default function HomePage() {
           <h1 className="text-4xl font-bold tracking-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
             도토리의 집들이
           </h1>
-          <p className="mt-4 text-base text-white/85 drop-shadow sm:text-lg md:text-xl">
-            내집마련을 함께 축하해 주세요 · 2027년 10월 입주
+          <p className="mt-3 text-sm text-white/75 drop-shadow sm:text-base">
+            내집마련을 함께 축하해 주세요
           </p>
 
-          {/* CTA 버튼 — buttonVariants로 Link를 스타일링 */}
+          {/* D-Day 카운터 */}
+          <div className="mt-8">
+            <DDay />
+          </div>
+
+          {/* CTA 버튼 */}
           <Link
             href="/housewarmings"
             className={cn(
