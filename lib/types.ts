@@ -9,6 +9,7 @@ export interface Housewarming {
   dress_code: string | null;
   note: string | null;
   description: string | null;
+  kakao_open_chat_url: string | null;
   created_at: string;
 }
 

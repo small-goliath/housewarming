@@ -15,6 +15,7 @@ class HousewarmingResponse(BaseModel):
     dress_code: str | None = None
     note: str | None = None
     description: str | None = None
+    kakao_open_chat_url: str | None = None
     created_at: datetime
 
 

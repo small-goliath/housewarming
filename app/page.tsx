@@ -1,5 +1,5 @@
+import { BookHeart, Home, UtensilsCrossed } from "lucide-react"
 import Link from "next/link"
-import { Home, UtensilsCrossed, BookHeart } from "lucide-react"
 
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,21 +9,21 @@ import { cn } from "@/lib/utils"
 const highlights = [
   {
     icon: Home,
-    title: "새 보금자리",
+    title: "새 보금자리 구경",
     description:
-      "오랫동안 꿈꿔온 우리만의 공간입니다. 직접 눈으로 보러 오세요.",
+      "드디어 내 집! 침대 위치부터 냉장고 속까지 — 직접 오셔서 품평회 열어주세요.",
   },
   {
     icon: UtensilsCrossed,
     title: "집밥 한 끼",
     description:
-      "정성껏 준비한 음식과 함께 따뜻하고 즐거운 시간을 나눠요.",
+      "배달 앱 말고 직접 만든 음식입니다. 맛 보장은 못 하지만 정성은 보장해요.",
   },
   {
     icon: BookHeart,
-    title: "방명록 남기기",
+    title: "방명록 한 줄",
     description:
-      "소중한 한 마디를 남겨주세요. 오래도록 간직하겠습니다.",
+      "\"잘 살아라\" 한 마디도 환영. 두고두고 꺼내볼 소중한 기록이 될 거예요.",
   },
 ]
 
@@ -95,22 +95,23 @@ export default function HomePage() {
               id="intro-heading"
               className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
             >
-              집들이에 초대합니다 🏡
+              저의 집들이에 여러분을 초대합니다.
             </h2>
             <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-              오랜 기다림 끝에 드디어 우리 집이 생겼습니다.
-              이 기쁨을 가까운 분들과 함께 나누고 싶어 자리를 마련했어요.
-              부담 없이, 편하게 들러 주세요.
+              드디어 내집!!!<br />
+              긴 여정이 끝났습니다.<br />
+              자축하고 싶은데 혼자 하긴 좀 쓸쓸해서<br />
+              여러분과 함께 즐기려고합니다.
             </p>
             <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-              정성껏 준비한 음식과 함께 도란도란 이야기 나누며
-              따뜻한 시간을 보내고 싶습니다.
-              오시는 길이 멀더라도 꼭 얼굴 한번 비춰주세요.
+              거창한 거 없습니다.<br />
+              맛있는 거 먹고, 수다 떨고, 새집 구경하고,<br />
+              그냥 같이 있어 주시면 돼요.<br />
             </p>
             <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-              새집의 첫 손님들과 함께하는 이 순간이
-              평생 소중한 기억으로 남을 것 같습니다.
-              기다리고 있을게요. 🍀
+              여러분이 와주는 것만으로<br />
+              이 집이 사람냄새가 나는 진짜 집이 될 것 같아요.<br />
+              꼭 와주세요. 기다리고 있을게요!
             </p>
           </div>
 
@@ -159,11 +160,11 @@ export default function HomePage() {
             id="cta-heading"
             className="text-xl font-semibold text-foreground sm:text-2xl"
           >
-            함께해 주실 거죠?
+            아직 신청 안 하셨죠? 👀
           </h2>
           <p className="max-w-md text-sm text-muted-foreground sm:text-base">
-            참여 신청과 방명록은 아래 버튼에서 확인하실 수 있어요.
-            일정을 확인하고 편한 날 들러 주세요.
+            자리가 무한정은 아니에요.<br />
+            일정 확인하고 편한 날로 신청해 주세요.
           </p>
           <Link
             href="/housewarmings"

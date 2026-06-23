@@ -1,5 +1,5 @@
 import { HousewarmingCard } from "@/components/housewarming-card";
-import { formatEventShortKST } from "@/lib/datetime";
+import { formatMonthKST } from "@/lib/datetime";
 import type { Housewarming } from "@/lib/types";
 
 // 목록은 비로그인 공개 — 서버에서 인증 없이 FastAPI 호출.
@@ -47,7 +47,7 @@ export default async function HousewarmingsPage() {
             <HousewarmingCard
               key={hw.id}
               housewarming={hw}
-              eventLabel={formatEventShortKST(hw.event_at)}
+              eventLabel={formatMonthKST(hw.event_at)}
               detailHref={`/housewarmings/${hw.id}`}
             />
           ))}

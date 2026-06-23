@@ -69,7 +69,6 @@ export function formatDateTimeKST(iso: string): string {
  * UTC ISO 문자열로 변환. KST = UTC+9 (DST 없음).
  */
 export function kstInputToUtcIso(localStr: string): string {
-  // 입력을 KST(+09:00)로 해석해 UTC ISO 로 변환
   return new Date(`${localStr}:00+09:00`).toISOString();
 }
 
@@ -77,4 +76,24 @@ export function kstInputToUtcIso(localStr: string): string {
 export function utcIsoToKstInput(iso: string): string {
   const { year, month, day, hour, minute } = toParts(iso);
   return `${year}-${month}-${day}T${hour}:${minute}`;
+}
+
+/**
+ * 관리자 폼 month 입력값("YYYY-MM")을 UTC ISO 문자열로 변환.
+ * 해당 월 1일 00:00 KST → UTC.
+ */
+export function monthInputToUtcIso(monthStr: string): string {
+  return new Date(`${monthStr}-01T00:00:00+09:00`).toISOString();
+}
+
+/** 저장된 UTC ISO 를 month 입력값("YYYY-MM", KST 기준)으로 변환. */
+export function utcIsoToMonthInput(iso: string): string {
+  const { year, month } = toParts(iso);
+  return `${year}-${month}`;
+}
+
+/** 목록·상세용: "2027년 10월" (KST 기준). */
+export function formatMonthKST(iso: string): string {
+  const { year, month } = toParts(iso);
+  return `${year}년 ${parseInt(month)}월`;
 }

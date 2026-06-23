@@ -13,6 +13,7 @@ class HousewarmingCreate(BaseModel):
     dress_code: str | None = None
     note: str | None = None
     description: str | None = None
+    kakao_open_chat_url: str | None = None
 
 
 class HousewarmingUpdate(BaseModel):
@@ -24,6 +25,7 @@ class HousewarmingUpdate(BaseModel):
     dress_code: str | None = None
     note: str | None = None
     description: str | None = None
+    kakao_open_chat_url: str | None = None
 
 
 class ImageUploadResponse(BaseModel):

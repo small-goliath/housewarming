@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { apiFetch, apiJson } from "@/lib/api";
-import { formatEventKST } from "@/lib/datetime";
+import { formatMonthKST } from "@/lib/datetime";
 import type { Housewarming, MyParticipation, Participant } from "@/lib/types";
 import {
   HousewarmingDetailView,
@@ -144,7 +144,7 @@ export function HousewarmingDetail({ id }: { id: string }) {
   return (
     <HousewarmingDetailView
       housewarming={housewarming}
-      eventLabel={formatEventKST(housewarming.event_at)}
+      eventLabel={formatMonthKST(housewarming.event_at)}
       participants={participants}
       status={status}
       busy={busy}

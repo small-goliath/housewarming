@@ -9,7 +9,7 @@ import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { apiFetch, apiJson } from "@/lib/api";
-import { kstInputToUtcIso, utcIsoToKstInput } from "@/lib/datetime";
+import { monthInputToUtcIso, utcIsoToMonthInput } from "@/lib/datetime";
 import type { Housewarming } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,12 +25,13 @@ import {
 
 const formSchema = z.object({
   name: z.string().min(1, "집들이명을 입력해 주세요."),
-  eventAtLocal: z.string().min(1, "일시를 선택해 주세요."),
+  eventAtLocal: z.string().min(1, "월을 선택해 주세요."),
   organization: z.string().optional(),
   dressCode: z.string().optional(),
   note: z.string().optional(),
   description: z.string().optional(),
   imageUrl: z.string().optional(),
+  kakaoOpenChatUrl: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -57,12 +58,13 @@ export function AdminHousewarmingForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: initial?.name ?? "",
-      eventAtLocal: initial ? utcIsoToKstInput(initial.event_at) : "",
+      eventAtLocal: initial ? utcIsoToMonthInput(initial.event_at) : "",
       organization: initial?.organization ?? "",
       dressCode: initial?.dress_code ?? "",
       note: initial?.note ?? "",
       description: initial?.description ?? "",
       imageUrl: initial?.image_url ?? "",
+      kakaoOpenChatUrl: initial?.kakao_open_chat_url ?? "",
     },
   });
 
@@ -98,12 +100,13 @@ export function AdminHousewarmingForm({
   async function onSubmit(values: FormValues) {
     const payload = {
       name: values.name,
-      event_at: kstInputToUtcIso(values.eventAtLocal),
+      event_at: monthInputToUtcIso(values.eventAtLocal),
       organization: values.organization || null,
       dress_code: values.dressCode || null,
       note: values.note || null,
       description: values.description || null,
       image_url: values.imageUrl || null,
+      kakao_open_chat_url: values.kakaoOpenChatUrl || null,
     };
     try {
       if (isEdit) {
@@ -178,9 +181,9 @@ export function AdminHousewarmingForm({
           name="eventAtLocal"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>일시 (KST) *</FormLabel>
+              <FormLabel>집들이 월 *</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <Input type="month" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -237,6 +240,20 @@ export function AdminHousewarmingForm({
               <FormLabel>상세 설명</FormLabel>
               <FormControl>
                 <Textarea rows={4} placeholder="집들이에 대한 자세한 안내를 적어주세요." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="kakaoOpenChatUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>카카오 오픈채팅 URL</FormLabel>
+              <FormControl>
+                <Input placeholder="https://open.kakao.com/o/..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

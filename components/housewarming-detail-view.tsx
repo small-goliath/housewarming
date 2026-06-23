@@ -8,6 +8,7 @@ import Image from "next/image"
 import {
   CalendarDays,
   Home,
+  MessageCircle,
   Shirt,
   StickyNote,
   Users,
@@ -294,6 +295,7 @@ export function HousewarmingDetailView({
     dress_code,
     note,
     description,
+    kakao_open_chat_url,
   } = housewarming
 
   return (
@@ -393,7 +395,20 @@ export function HousewarmingDetailView({
           </CardContent>
         </Card>
 
-        {/* ── 3. 참여 버튼 영역 ── */}
+        {/* ── 3. 카카오 오픈채팅 버튼 (URL 있을 때만) ── */}
+        {kakao_open_chat_url && (
+          <a
+            href={kakao_open_chat_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] py-3.5 text-base font-semibold text-[#191600] transition-opacity hover:opacity-90"
+          >
+            <MessageCircle className="size-5" strokeWidth={2} aria-hidden="true" />
+            카카오톡 오픈채팅 참여하기
+          </a>
+        )}
+
+        {/* ── 4. 참여 버튼 영역 ── */}
         <ParticipationSection
           status={status}
           busy={busy}
