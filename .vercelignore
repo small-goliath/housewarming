@@ -1,0 +1,4 @@
+# Vercel 은 루트 Next.js 앱만 빌드한다. 백엔드(FastAPI)는 별도 플랫폼에 배포.
+backend/
+supabase/
+docs/

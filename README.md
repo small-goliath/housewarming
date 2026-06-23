@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 집들이 초대 홈페이지
 
-## Getting Started
+호스트 **도토리**의 내집마련 집들이 행사 소개 및 초대 손님 참여·관리·방명록 서비스.
 
-First, run the development server:
+- 기반 문서: [`docs/prd_v3.md`](docs/prd_v3.md)
+- 아키텍처: **Next.js 15 (App Router)** 프론트 + **FastAPI** 백엔드 + **Supabase**(Auth/DB/Storage)
+- 프론트는 DB에 직접 접근하지 않고 항상 FastAPI를 경유한다. Supabase RLS는 활성화 + deny-all(안전망), FastAPI는 Service Role로 접근한다.
+
+## 기술 스택
+
+| 영역 | 스택 |
+|------|------|
+| 프론트 | Next.js 15 · TypeScript · Tailwind CSS v4 · shadcn/ui(Base UI) · React Hook Form + Zod · Lucide |
+| 인증 | `@supabase/ssr` (카카오 OAuth) |
+| 백엔드 | FastAPI · uvicorn · supabase-py(Service Role) · httpx · Pydantic v2 |
+| 인프라 | Supabase(PostgreSQL·Auth·Storage) · Vercel(프론트) · Docker(백엔드) |
+
+> **Next.js 버전 정책**: Next.js 15 고정. `middleware.ts` 정식 API 사용. (16+ 업그레이드 시 `proxy.ts`로 전환 필요 — MVP 범위 밖)
+
+## 최초 1회 환경 구성
+
+```bash
+# 1. Node 의존성
+npm install
+
+# 2. Python 가상환경 + 백엔드 의존성 (Python 3.12)
+python3.12 -m venv backend/.venv
+source backend/.venv/bin/activate      # Windows: backend\.venv\Scripts\activate
+pip install -r backend/requirements.txt
+
+# 3. 환경변수 파일 작성
+cp .env.local.example .env.local       # Next.js
+cp backend/.env.example backend/.env   # FastAPI
+```
+
+`.env.local`, `backend/.env`에 Supabase 프로젝트 키와 관리자 카카오 ID를 채운다.
+
+## 개발 서버 실행
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`concurrently`로 다음 두 서버가 동시에 실행된다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 프론트(Next.js): http://localhost:3000
+- 백엔드(FastAPI): http://localhost:8000 (`/docs`에서 OpenAPI 문서 확인)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+개별 실행이 필요하면 `npm run dev:frontend` / `npm run dev:backend`.
 
-## Learn More
+## 디렉토리 구조
 
-To learn more about Next.js, take a look at the following resources:
+```
+/
+├── app/                  ← Next.js App Router 페이지
+├── components/           ← UI 컴포넌트 (components/ui = shadcn)
+├── lib/                  ← apiFetch 래퍼, supabase 클라이언트, utils
+├── public/banner.mp4     ← 메인 배너 동영상
+├── middleware.ts         ← 인증 보호 라우팅 (Next.js 15)
+├── backend/              ← FastAPI
+│   ├── main.py · config.py
+│   ├── routers/ · dependencies/ · schemas/
+│   ├── Dockerfile · .dockerignore
+│   └── requirements.txt · .env.example
+└── docs/                 ← PRD 등 문서
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 빌드 / 검증
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build     # 프론트 프로덕션 빌드 + 타입 체크
+npm run lint      # ESLint
+```
