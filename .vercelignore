@@ -1,4 +1,5 @@
-# Vercel 은 루트 Next.js 앱만 빌드한다. 백엔드(FastAPI)는 별도 플랫폼에 배포.
-backend/
-supabase/
-docs/
+# Vercel(프론트) 빌드에서 제외. 선행 슬래시로 "저장소 루트"에 앵커링한다.
+# (슬래시 없으면 lib/supabase 같은 하위 동명 디렉토리까지 제외되어 빌드가 깨진다)
+/backend/
+/supabase/
+/docs/
