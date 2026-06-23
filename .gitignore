@@ -42,6 +42,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# 루트 원본 에셋 (빌드 결과물은 app/ 또는 public/ 에 위치)
+icon.png
+
 # python / fastapi backend
 backend/.venv/
 __pycache__/
