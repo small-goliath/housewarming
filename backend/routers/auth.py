@@ -8,10 +8,10 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, status
 
-from backend.config import settings
-from backend.dependencies.auth import CurrentUser
-from backend.dependencies.supabase import get_supabase
-from backend.schemas.profile import MeResponse, ProfileResponse
+from config import settings
+from dependencies.auth import CurrentUser
+from dependencies.supabase import get_supabase
+from schemas.profile import MeResponse, ProfileResponse
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 

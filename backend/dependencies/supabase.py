@@ -8,7 +8,7 @@ from functools import lru_cache
 
 from supabase import Client, create_client
 
-from backend.config import settings
+from config import settings
 
 
 @lru_cache

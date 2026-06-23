@@ -10,9 +10,9 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException, status
 from postgrest.exceptions import APIError
 
-from backend.dependencies.auth import CurrentUser
-from backend.dependencies.supabase import get_supabase
-from backend.schemas.housewarming import (
+from dependencies.auth import CurrentUser
+from dependencies.supabase import get_supabase
+from schemas.housewarming import (
     HousewarmingResponse,
     MyParticipationResponse,
     ParticipantResponse,

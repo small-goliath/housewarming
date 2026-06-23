@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently -n next,api -c blue,green \"npm:dev:frontend\" \"npm:dev:backend\"",
     "dev:frontend": "next dev --turbopack",
-    "dev:backend": "backend/.venv/bin/uvicorn backend.main:app --reload --port 8000",
+    "dev:backend": "backend/.venv/bin/uvicorn main:app --app-dir backend --reload --port 8000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

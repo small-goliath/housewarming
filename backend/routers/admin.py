@@ -10,21 +10,21 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 
-from backend.dependencies.auth import AdminUser
-from backend.dependencies.supabase import get_supabase
-from backend.schemas.admin import (
+from dependencies.auth import AdminUser
+from dependencies.supabase import get_supabase
+from schemas.admin import (
     HousewarmingCreate,
     HousewarmingUpdate,
     ImageUploadResponse,
 )
-from backend.schemas.housewarming import HousewarmingResponse
+from schemas.housewarming import HousewarmingResponse
 
 router = APIRouter(prefix="/api/admin/housewarmings", tags=["admin"])
 
 _BUCKET = "housewarming-images"
 _ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _EXT_BY_TYPE = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}
-_MAX_SIZE = 5 * 1024 * 1024  # 5MB
+_MAX_SIZE = 4 * 1024 * 1024  # 4MB (Vercel 서버리스 요청 본문 4.5MB 제한 하위 안전값)
 
 
 @router.get("", response_model=list[HousewarmingResponse])
@@ -88,7 +88,7 @@ async def upload_image(
 ) -> ImageUploadResponse:
     """이미지 업로드 → Storage 저장 후 public URL 반환.
 
-    검증: content-type ∈ {jpeg, png, webp}, size ≤ 5MB.
+    검증: content-type ∈ {jpeg, png, webp}, size ≤ 4MB.
     클라이언트는 반환된 URL 을 등록/수정 폼의 image_url 로 사용한다.
     """
     if file.content_type not in _ALLOWED_CONTENT_TYPES:
@@ -101,7 +101,7 @@ async def upload_image(
     if len(contents) > _MAX_SIZE:
         raise HTTPException(
             status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-            detail="이미지 크기는 5MB 이하여야 합니다.",
+            detail="이미지 크기는 4MB 이하여야 합니다.",
         )
 
     ext = _EXT_BY_TYPE[file.content_type]

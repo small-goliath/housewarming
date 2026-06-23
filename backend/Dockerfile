@@ -17,4 +17,4 @@ COPY backend ./backend
 EXPOSE 8000
 
 # 운영에서는 --reload 미사용. 플랫폼이 주는 $PORT 우선.
-CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn main:app --app-dir backend --host 0.0.0.0 --port ${PORT:-8000}"]

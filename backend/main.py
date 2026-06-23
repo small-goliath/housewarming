@@ -7,8 +7,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.config import settings
-from backend.routers import admin, auth, guestbook, housewarmings
+from config import settings
+from routers import admin, auth, guestbook, housewarmings
 
 app = FastAPI(title="집들이 초대 홈페이지 API", version="0.1.0")
 

@@ -12,8 +12,8 @@ import httpx
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from backend.config import settings
-from backend.dependencies.supabase import get_supabase
+from config import settings
+from dependencies.supabase import get_supabase
 
 _bearer = HTTPBearer(auto_error=True)
 

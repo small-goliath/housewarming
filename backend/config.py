@@ -4,13 +4,18 @@ backend/.env 파일에서 환경변수를 로드한다.
 """
 
 from functools import cached_property
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# backend/.env (config.py 위치 기준). 로컬에서 사용하고, 운영(Docker/Vercel)에서는
+# 파일이 없어도 무방하다 — 플랫폼 OS 환경변수에서 직접 읽는다.
+_ENV_FILE = Path(__file__).resolve().parent / ".env"
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="backend/.env",
+        env_file=str(_ENV_FILE),
         env_file_encoding="utf-8",
         extra="ignore",
     )
