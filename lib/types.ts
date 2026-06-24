@@ -48,6 +48,19 @@ export interface Profile {
   updated_at: string;
 }
 
+export interface DashboardParticipant {
+  nickname: string | null;
+  profile_image_url: string | null;
+}
+
+export interface DashboardItem {
+  id: string;
+  name: string;
+  event_at: string; // ISO UTC
+  participant_count: number;
+  participants: DashboardParticipant[];
+}
+
 export interface Me {
   id: string;
   kakao_id: string;

@@ -5,7 +5,7 @@ import { Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { apiFetch, apiJson } from "@/lib/api";
-import { formatEventShortKST } from "@/lib/datetime";
+import { formatMonthKST } from "@/lib/datetime";
 import type { Housewarming } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -77,9 +77,8 @@ export function AdminDashboard() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">집들이 관리</h1>
+    <div>
+      <div className="mb-6 flex justify-end">
         <Button onClick={openCreate}>
           <Plus className="size-4" />
           집들이 등록
@@ -99,7 +98,7 @@ export function AdminDashboard() {
               <TableRow>
                 <TableHead>집들이명</TableHead>
                 <TableHead>편성</TableHead>
-                <TableHead>일시 (KST)</TableHead>
+                <TableHead>집들이 월</TableHead>
                 <TableHead className="text-right">관리</TableHead>
               </TableRow>
             </TableHeader>
@@ -108,7 +107,7 @@ export function AdminDashboard() {
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>{item.organization ?? "-"}</TableCell>
-                  <TableCell>{formatEventShortKST(item.event_at)}</TableCell>
+                  <TableCell>{formatMonthKST(item.event_at)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <Button
@@ -141,7 +140,7 @@ export function AdminDashboard() {
           <DialogHeader>
             <DialogTitle>{editing ? "집들이 수정" : "집들이 등록"}</DialogTitle>
             <DialogDescription>
-              이미지를 업로드하고 정보를 입력해 주세요. 일시는 KST 기준입니다.
+              이미지를 업로드하고 정보를 입력해 주세요. 집들이 월은 KST 기준입니다.
             </DialogDescription>
           </DialogHeader>
           <AdminHousewarmingForm
@@ -151,6 +150,6 @@ export function AdminDashboard() {
           />
         </DialogContent>
       </Dialog>
-    </main>
+    </div>
   );
 }

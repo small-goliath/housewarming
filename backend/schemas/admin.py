@@ -30,3 +30,18 @@ class HousewarmingUpdate(BaseModel):
 
 class ImageUploadResponse(BaseModel):
     image_url: str
+
+
+class DashboardParticipant(BaseModel):
+    nickname: str | None = None
+    profile_image_url: str | None = None
+
+
+class DashboardItem(BaseModel):
+    """집들이별 참여 현황 (관리자 대시보드용)."""
+
+    id: str
+    name: str
+    event_at: datetime
+    participant_count: int
+    participants: list[DashboardParticipant]

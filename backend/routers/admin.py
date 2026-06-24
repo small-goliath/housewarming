@@ -13,6 +13,8 @@ from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from dependencies.auth import AdminUser
 from dependencies.supabase import get_supabase
 from schemas.admin import (
+    DashboardItem,
+    DashboardParticipant,
     HousewarmingCreate,
     HousewarmingUpdate,
     ImageUploadResponse,
@@ -37,6 +39,46 @@ async def admin_list(admin: AdminUser) -> list[HousewarmingResponse]:
         .execute()
     )
     return [HousewarmingResponse(**row) for row in (res.data or [])]
+
+
+@router.get("/stats", response_model=list[DashboardItem])
+async def admin_stats(admin: AdminUser) -> list[DashboardItem]:
+    """집들이별 참여 현황 (참여 인원 수 + 참여자 명단)."""
+    supabase = get_supabase()
+
+    hw_res = (
+        supabase.table("housewarmings")
+        .select("id, name, event_at")
+        .order("event_at", desc=False)
+        .execute()
+    )
+    part_res = (
+        supabase.table("participations")
+        .select("housewarming_id, profiles(nickname, profile_image_url)")
+        .execute()
+    )
+
+    # housewarming_id 별로 참여자 그룹화
+    grouped: dict[str, list[DashboardParticipant]] = {}
+    for row in part_res.data or []:
+        hw_id = str(row.get("housewarming_id"))
+        profile = row.get("profiles") or {}
+        grouped.setdefault(hw_id, []).append(DashboardParticipant(**profile))
+
+    items: list[DashboardItem] = []
+    for hw in hw_res.data or []:
+        hw_id = str(hw["id"])
+        participants = grouped.get(hw_id, [])
+        items.append(
+            DashboardItem(
+                id=hw_id,
+                name=hw["name"],
+                event_at=hw["event_at"],
+                participant_count=len(participants),
+                participants=participants,
+            )
+        )
+    return items
 
 
 @router.post("", response_model=HousewarmingResponse, status_code=status.HTTP_201_CREATED)

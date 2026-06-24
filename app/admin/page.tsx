@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { apiFetch } from "@/lib/api";
 import type { Me } from "@/lib/types";
 import { AdminDashboard } from "@/components/admin-dashboard";
+import { AdminParticipants } from "@/components/admin-participants";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 /**
  * 관리자 페이지. middleware 가 로그인 여부는 보호하고,
@@ -50,5 +52,21 @@ export default function AdminPage() {
     );
   }
 
-  return <AdminDashboard />;
+  return (
+    <main className="mx-auto max-w-4xl px-4 py-10">
+      <h1 className="mb-6 text-2xl font-bold tracking-tight">관리자</h1>
+      <Tabs defaultValue="manage">
+        <TabsList className="mb-6">
+          <TabsTrigger value="manage">집들이 관리</TabsTrigger>
+          <TabsTrigger value="participants">참여 현황</TabsTrigger>
+        </TabsList>
+        <TabsContent value="manage">
+          <AdminDashboard />
+        </TabsContent>
+        <TabsContent value="participants">
+          <AdminParticipants />
+        </TabsContent>
+      </Tabs>
+    </main>
+  );
 }
