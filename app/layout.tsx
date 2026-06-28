@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 /* 본문 산세리프 — Geist */
 const geistSans = Geist({
@@ -45,6 +46,7 @@ export default function RootLayout({
         <Header />
         <div className="flex-1">{children}</div>
         <Toaster richColors position="top-center" />
+        <SpeedInsights />
       </body>
     </html>
   );
