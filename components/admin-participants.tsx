@@ -34,12 +34,16 @@ export function AdminParticipants() {
   }, [load]);
 
   if (loading) {
-    return <p className="text-muted-foreground py-20 text-center">불러오는 중...</p>;
+    return (
+      <p className="text-muted-foreground py-20 text-center text-sm">
+        불러오는 중...
+      </p>
+    );
   }
 
   if (items.length === 0) {
     return (
-      <p className="text-muted-foreground py-20 text-center">
+      <p className="text-muted-foreground py-20 text-center text-sm">
         등록된 집들이가 없습니다.
       </p>
     );
@@ -48,28 +52,29 @@ export function AdminParticipants() {
   const totalParticipants = items.reduce((sum, i) => sum + i.participant_count, 0);
 
   return (
-    <div className="space-y-6">
-      {/* 전체 요약 */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Users className="size-4" />
-        전체 참여 인원{" "}
-        <span className="font-semibold text-foreground">{totalParticipants}명</span>
+    <div className="space-y-5">
+      {/* 전체 요약 배지 */}
+      <div className="flex items-center gap-2 rounded-xl bg-primary/8 border border-primary/15 px-4 py-3 text-sm">
+        <Users className="size-4 text-primary/70" />
+        <span className="text-muted-foreground">전체 참여 인원</span>
+        <span className="font-bold text-foreground">{totalParticipants}명</span>
         <span className="text-muted-foreground/60">· 집들이 {items.length}개</span>
       </div>
 
       {/* 집들이별 카드 */}
       {items.map((item) => (
-        <Card key={item.id}>
+        <Card key={item.id} className="rounded-2xl border-border/60 shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
-                <CardTitle className="text-lg">{item.name}</CardTitle>
+                <CardTitle className="text-base font-semibold">{item.name}</CardTitle>
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <CalendarDays className="size-3.5" />
+                  <CalendarDays className="size-3.5 text-primary/60" />
                   {formatMonthKST(item.event_at)}
                 </p>
               </div>
-              <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+              {/* 참여자 수 배지 */}
+              <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
                 {item.participant_count}명
               </span>
             </div>
@@ -85,15 +90,15 @@ export function AdminParticipants() {
                   const name = p.nickname ?? "?";
                   return (
                     <li key={idx} className="flex items-center gap-2">
-                      <Avatar className="size-8">
+                      <Avatar className="size-8 ring-1 ring-border/50">
                         {p.profile_image_url && (
                           <AvatarImage src={p.profile_image_url} alt={name} />
                         )}
-                        <AvatarFallback className="text-xs">
+                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
                           {name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-sm text-foreground">{name}</span>
+                      <span className="text-sm font-medium text-foreground">{name}</span>
                     </li>
                   );
                 })}

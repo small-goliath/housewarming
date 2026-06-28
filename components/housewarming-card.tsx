@@ -6,11 +6,6 @@ import Link from "next/link"
 import { CalendarDays, ImageOff } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card"
 import { buttonVariants } from "@/components/ui/button"
 import type { Housewarming } from "@/lib/types"
 
@@ -41,17 +36,17 @@ function ThumbnailArea({
   detailHref: string
 }) {
   return (
-    // 이미지 영역 전체를 링크로 감싸 상세 페이지로 이동
+    /* 이미지 영역 전체를 링크로 감싸 상세 페이지로 이동 */
     <Link
       href={detailHref}
-      className="block overflow-hidden rounded-t-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
+      className="block overflow-hidden rounded-t-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
       aria-label={`${name} 상세 보기`}
       tabIndex={0}
     >
       {/* 16:9 비율 컨테이너 */}
-      <div className="relative aspect-video w-full overflow-hidden bg-muted transition-transform duration-300 group-hover/card:scale-[1.02]">
+      <div className="relative aspect-video w-full overflow-hidden bg-muted group-hover/card:brightness-[0.97] transition-[transform,brightness] duration-300 group-hover/card:scale-[1.02]">
         {imageUrl ? (
-          // Supabase Storage 이미지 표시
+          /* Supabase Storage 이미지 표시 */
           <Image
             src={imageUrl}
             alt={`${name} 대표 이미지`}
@@ -60,17 +55,17 @@ function ThumbnailArea({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          // image_url 없을 때 플레이스홀더
+          /* image_url 없을 때 플레이스홀더 */
           <div
             className="flex h-full w-full flex-col items-center justify-center gap-2 bg-muted"
             aria-label="이미지 없음"
           >
             <ImageOff
-              className="size-10 text-muted-foreground/50"
-              strokeWidth={1.5}
+              className="size-9 text-muted-foreground/35"
+              strokeWidth={1.25}
               aria-hidden="true"
             />
-            <span className="text-xs text-muted-foreground/60">이미지 없음</span>
+            <span className="text-xs text-muted-foreground/50">이미지 없음</span>
           </div>
         )}
       </div>
@@ -90,17 +85,18 @@ export function HousewarmingCard({
   const { name, organization, image_url } = housewarming
 
   return (
-    <Card
+    <article
       className={cn(
-        // 너비는 부모 그리드가 담당; 카드 자체는 100% 채움
-        "w-full",
-        // hover 인터랙션: 그림자 강화 + 미세한 위로 이동
-        "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:ring-foreground/20",
-        // 이미지 상단 패딩 제거 (Card 기본값 pt 덮어쓰기)
-        "pt-0"
+        /* 카드 기본 구조 */
+        "group/card w-full flex flex-col",
+        /* 배경, 테두리, 라운드 */
+        "bg-card rounded-2xl border border-border/60 overflow-hidden",
+        /* 호버 인터랙션 */
+        "transition-all duration-300",
+        "hover:-translate-y-1 hover:shadow-xl hover:shadow-foreground/[0.07] hover:border-primary/20"
       )}
     >
-      {/* ── 상단: 대표 이미지 (클릭 시 상세 이동) ── */}
+      {/* ── 상단: 대표 이미지 ── */}
       <ThumbnailArea
         imageUrl={image_url}
         name={name}
@@ -108,50 +104,49 @@ export function HousewarmingCard({
       />
 
       {/* ── 본문: 집들이명, 편성, 일시 ── */}
-      <CardContent className="flex flex-col gap-2 pt-4">
+      <div className="flex flex-col gap-2 px-5 pt-4 pb-3 flex-1">
+        {/* 편성 배지 — null이면 렌더링 생략 */}
+        {organization && (
+          <span className="inline-flex w-fit items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+            {organization}
+          </span>
+        )}
+
         {/* 집들이명 */}
-        <h3 className="line-clamp-2 text-base font-semibold leading-snug tracking-tight text-foreground">
+        <h3 className="font-heading line-clamp-2 text-base font-bold leading-snug tracking-tight text-foreground">
           {name}
         </h3>
 
-        {/* 편성 — null이면 렌더링 생략 */}
-        {organization && (
-          <p className="text-xs font-medium text-muted-foreground">
-            {organization}
-          </p>
-        )}
-
         {/* 일시 — 아이콘과 함께 표시 */}
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-auto pt-1">
           <CalendarDays
-            className="size-3.5 shrink-0"
+            className="size-3.5 shrink-0 text-primary/70"
             strokeWidth={1.75}
             aria-hidden="true"
           />
           <time
-            // TODO: event_at(ISO)으로 machine-readable dateTime 제공 필요
             dateTime={housewarming.event_at}
             className="tabular-nums"
           >
             {eventLabel}
           </time>
         </div>
-      </CardContent>
+      </div>
 
-      {/* ── 하단 푸터: "참여하기" 버튼 (전체 너비) ── */}
-      <CardFooter className="pt-0">
+      {/* ── 하단 푸터: "참여하기" 버튼 ── */}
+      <div className="px-5 pb-5 pt-2">
         <Link
           href={detailHref}
           className={cn(
             buttonVariants({ variant: "default", size: "default" }),
-            // 전체 너비 + 높이 약간 키움
-            "w-full h-9"
+            /* 전체 너비 + 라운드 + 높이 */
+            "w-full h-9 rounded-xl text-sm font-semibold"
           )}
           aria-label={`${name} 참여하기`}
         >
           참여하기
         </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </article>
   )
 }

@@ -24,19 +24,35 @@ export function AddToCalendar({ housewarming }: { housewarming: Housewarming }) 
   }
 
   return (
-    <div className="rounded-xl border p-4">
-      <p className="mb-3 flex items-center gap-2 text-sm font-medium text-foreground">
-        <CalendarPlus className="size-4" aria-hidden="true" />
+    /* 캘린더 추가 섹션 — 부드러운 배경으로 구분 */
+    <div className="rounded-2xl border border-border/60 bg-muted/30 p-5">
+      <p className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
+        <CalendarPlus className="size-4 text-primary/80" aria-hidden="true" />
         캘린더에 추가
       </p>
-      <div className="grid grid-cols-3 gap-2">
-        <Button variant="outline" size="sm" onClick={handleGoogle}>
+      <div className="grid grid-cols-3 gap-2.5">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleGoogle}
+          className="rounded-lg text-xs font-medium border-border/70 hover:border-primary/30 hover:bg-primary/5 transition-colors"
+        >
           구글
         </Button>
-        <Button variant="outline" size="sm" onClick={handleIcs}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleIcs}
+          className="rounded-lg text-xs font-medium border-border/70 hover:border-primary/30 hover:bg-primary/5 transition-colors"
+        >
           애플
         </Button>
-        <Button variant="outline" size="sm" onClick={handleIcs}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleIcs}
+          className="rounded-lg text-xs font-medium border-border/70 hover:border-primary/30 hover:bg-primary/5 transition-colors"
+        >
           카카오
         </Button>
       </div>

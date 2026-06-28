@@ -63,11 +63,12 @@ function NavLink({
     <Link
       href={href}
       className={cn(
-        "relative shrink-0 text-sm transition-colors duration-150 px-1 pb-0.5",
+        /* 기본 스타일 — 여백, 전환 */
+        "relative shrink-0 text-sm transition-colors duration-200 px-1 pb-1",
         "hover:text-foreground",
         active
-          ? // 활성 탭: 진한 텍스트 + 하단 언더라인 강조
-            "font-semibold text-foreground after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:bg-foreground"
+          ? /* 활성 탭: 프라이머리 컬러 + 하단 언더라인 */
+            "font-semibold text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:bg-primary"
           : "font-medium text-muted-foreground"
       )}
       aria-current={active ? "page" : undefined}
@@ -111,7 +112,7 @@ function LoggedInArea({
   const fallbackChar = user.nickname?.charAt(0)?.toUpperCase() ?? "?"
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2.5">
       {/* 프로필 아바타 */}
       <Avatar size="default" aria-label={`${user.nickname ?? "사용자"} 프로필 사진`}>
         {user.profileImageUrl ? (
@@ -120,20 +121,23 @@ function LoggedInArea({
             alt={user.nickname ?? "사용자"}
           />
         ) : null}
-        <AvatarFallback>{fallbackChar}</AvatarFallback>
+        <AvatarFallback className="bg-primary/15 text-primary font-semibold text-xs">
+          {fallbackChar}
+        </AvatarFallback>
       </Avatar>
 
       {/* 닉네임 — 작은 화면에서는 숨김 */}
-      <span className="hidden text-sm font-medium sm:inline">
+      <span className="hidden text-sm font-medium text-foreground sm:inline">
         {user.nickname ?? "사용자"}
       </span>
 
-      {/* 로그아웃 버튼 — 실제 로직은 onLogout prop으로 주입 */}
+      {/* 로그아웃 버튼 */}
       <Button
         variant="outline"
         size="sm"
         onClick={onLogout}
         aria-label="로그아웃"
+        className="text-xs h-8 px-3 border-border/70 hover:bg-muted/60 transition-colors"
       >
         로그아웃
       </Button>
@@ -165,37 +169,39 @@ export function SiteHeader({
   return (
     <header
       className={cn(
-        // 상단 고정 및 z-index
+        /* 상단 고정 및 z-index */
         "sticky top-0 z-50",
-        // 배경: 반투명 + 블러
-        "bg-background/80 backdrop-blur-md",
-        // 하단 구분선
-        "border-b border-border"
+        /* 따뜻한 배경 + 블러 */
+        "bg-background/90 backdrop-blur-md",
+        /* 하단 구분선 — 부드러운 웜 베이지 */
+        "border-b border-border/60",
+        /* 미세한 그림자로 깊이감 추가 */
+        "shadow-sm shadow-foreground/[0.03]"
       )}
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4 sm:px-6">
 
         {/* ── 좌측: 로고 / 사이트명 ── */}
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-1.5 font-semibold text-foreground hover:opacity-80 transition-opacity"
+          className="flex shrink-0 items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors duration-200"
           aria-label="도토리의 집들이 홈으로 이동"
         >
-          {/* 집 느낌의 아이콘 */}
+          {/* 홈 아이콘 — 포인트 컬러 */}
           <Home
-            className="size-5 shrink-0"
+            className="size-[18px] shrink-0 text-primary"
             strokeWidth={1.75}
             aria-hidden="true"
           />
-          {/* 사이트명 — 매우 좁은 화면에서 숨김 */}
-          <span className="hidden text-sm xs:inline sm:text-base">
+          {/* 사이트명 */}
+          <span className="hidden text-sm font-semibold tracking-tight xs:inline sm:text-[15px]">
             도토리의 집들이
           </span>
         </Link>
 
         {/* ── 중앙: 네비게이션 탭 ── */}
         <nav
-          className="flex flex-1 items-center gap-4 overflow-x-auto scrollbar-none"
+          className="flex flex-1 items-center gap-5 overflow-x-auto scrollbar-none"
           aria-label="주요 메뉴"
         >
           {navItems.map((item) => (
@@ -211,18 +217,19 @@ export function SiteHeader({
         {/* ── 우측: 사용자 영역 ── */}
         <div className="ml-auto flex shrink-0 items-center">
           {loading ? (
-            // 세션 확인 중 — 스켈레톤 표시
+            /* 세션 확인 중 — 스켈레톤 표시 */
             <UserAreaSkeleton />
           ) : user ? (
-            // 로그인 상태
+            /* 로그인 상태 */
             <LoggedInArea user={user} onLogout={onLogout} />
           ) : (
-            // 비로그인 상태 — 로그인 링크 버튼
+            /* 비로그인 상태 — 로그인 링크 버튼 */
             <Button
               variant="default"
               size="sm"
               render={<Link href="/login" />}
               aria-label="로그인 페이지로 이동"
+              className="h-8 px-4 text-xs font-semibold rounded-full shadow-sm"
             >
               로그인
             </Button>

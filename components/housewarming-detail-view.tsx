@@ -12,13 +12,11 @@ import {
   Shirt,
   StickyNote,
   Users,
-  Building2,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { AddToCalendar } from "@/components/add-to-calendar"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import {
   Avatar,
   AvatarImage,
@@ -67,10 +65,10 @@ function HeroImage({
   name: string
 }) {
   return (
-    // 16:9 비율 이미지 컨테이너
-    <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-muted">
+    /* 16:9 비율 이미지 컨테이너 — 라운드 더 크게 */
+    <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-muted shadow-sm">
       {imageUrl ? (
-        // Supabase Storage 이미지 표시
+        /* Supabase Storage 이미지 표시 */
         <Image
           src={imageUrl}
           alt={`${name} 대표 이미지`}
@@ -80,17 +78,17 @@ function HeroImage({
           priority
         />
       ) : (
-        // image_url 없을 때 플레이스홀더
+        /* image_url 없을 때 플레이스홀더 */
         <div
           className="flex h-full w-full flex-col items-center justify-center gap-3 bg-muted"
           aria-label="대표 이미지 없음"
         >
           <Home
-            className="size-14 text-muted-foreground/40"
+            className="size-14 text-muted-foreground/30"
             strokeWidth={1.25}
             aria-hidden="true"
           />
-          <span className="text-sm text-muted-foreground/60">이미지 없음</span>
+          <span className="text-sm text-muted-foreground/50">이미지 없음</span>
         </div>
       )}
     </div>
@@ -113,16 +111,18 @@ function DetailRow({
   className?: string
 }) {
   return (
-    <div className={cn("flex gap-3", className)}>
-      {/* 라벨 아이콘 영역 */}
-      <div className="mt-0.5 flex shrink-0 items-start text-muted-foreground">
+    <div className={cn("flex gap-3.5", className)}>
+      {/* 아이콘 영역 — 포인트 컬러 */}
+      <div className="mt-0.5 flex shrink-0 items-start text-primary/70">
         {icon}
       </div>
       <div className="flex flex-col gap-0.5">
         {/* 라벨 텍스트 */}
-        <span className="text-xs font-medium text-muted-foreground">{label}</span>
+        <span className="text-xs font-medium text-muted-foreground tracking-wide">
+          {label}
+        </span>
         {/* 값 영역 */}
-        <div className="text-sm text-foreground">{children}</div>
+        <div className="text-sm font-medium text-foreground">{children}</div>
       </div>
     </div>
   )
@@ -161,11 +161,11 @@ function ParticipationSection({
 
       {/* status별 버튼 렌더링 — 하나만 표시 */}
       {status === "none" && (
-        // 미참여: 기본 강조 스타일
+        /* 미참여: 기본 강조 스타일 */
         <Button
           size="lg"
           variant="default"
-          className="w-full h-11 text-base font-semibold"
+          className="w-full h-12 text-base font-semibold rounded-xl shadow-md shadow-primary/20 transition-all"
           disabled={busy}
           onClick={onParticipate}
         >
@@ -174,11 +174,11 @@ function ParticipationSection({
       )}
 
       {status === "current" && (
-        // 참여 중: destructive 스타일
+        /* 참여 중: destructive 스타일 */
         <Button
           size="lg"
           variant="destructive"
-          className="w-full h-11 text-base font-semibold"
+          className="w-full h-12 text-base font-semibold rounded-xl"
           disabled={busy}
           onClick={onCancel}
         >
@@ -187,11 +187,11 @@ function ParticipationSection({
       )}
 
       {status === "other" && (
-        // 다른 집들이 참여 중: outline 스타일
+        /* 다른 집들이 참여 중: outline 스타일 */
         <Button
           size="lg"
           variant="outline"
-          className="w-full h-11 text-base font-semibold"
+          className="w-full h-12 text-base font-semibold rounded-xl"
           disabled={busy}
           onClick={onChange}
         >
@@ -210,9 +210,9 @@ function ParticipantList({ participants }: { participants: Participant[] }) {
   return (
     <section aria-labelledby="participants-heading">
       {/* 섹션 제목 */}
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-5 flex items-center gap-2">
         <Users
-          className="size-4 text-muted-foreground"
+          className="size-4 text-primary/70"
           strokeWidth={1.75}
           aria-hidden="true"
         />
@@ -228,12 +228,12 @@ function ParticipantList({ participants }: { participants: Participant[] }) {
       </div>
 
       {participants.length === 0 ? (
-        // 참여자 없을 때 안내
-        <p className="py-6 text-center text-sm text-muted-foreground">
+        /* 참여자 없을 때 안내 */
+        <p className="py-8 text-center text-sm text-muted-foreground">
           아직 참여자가 없어요
         </p>
       ) : (
-        // 참여자 그리드 목록
+        /* 참여자 그리드 목록 */
         <ul
           className="grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-x-3 gap-y-5"
           aria-label="참여자 목록"
@@ -247,22 +247,25 @@ function ParticipantList({ participants }: { participants: Participant[] }) {
             return (
               <li
                 key={index}
-                className="flex flex-col items-center gap-1.5"
+                className="flex flex-col items-center gap-2"
               >
                 {/* 프로필 아바타 */}
-                <Avatar size="lg" className="size-12">
+                <Avatar size="lg" className="size-12 ring-2 ring-border/50">
                   {participant.profile_image_url && (
                     <AvatarImage
                       src={participant.profile_image_url}
                       alt={`${displayName} 프로필 이미지`}
                     />
                   )}
-                  <AvatarFallback aria-label={displayName}>
+                  <AvatarFallback
+                    aria-label={displayName}
+                    className="bg-primary/10 text-primary font-semibold text-sm"
+                  >
                     {initial}
                   </AvatarFallback>
                 </Avatar>
                 {/* 닉네임 */}
-                <span className="max-w-[72px] truncate text-center text-xs text-muted-foreground">
+                <span className="max-w-[72px] truncate text-center text-xs font-medium text-muted-foreground">
                   {displayName}
                 </span>
               </li>
@@ -300,40 +303,34 @@ export function HousewarmingDetailView({
   } = housewarming
 
   return (
-    // 최대 너비 컨테이너 — 모바일 우선, 중앙 정렬
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    /* 최대 너비 컨테이너 — 모바일 우선, 중앙 정렬 */
+    <main className="mx-auto max-w-3xl px-4 py-12">
       <div className="flex flex-col gap-8">
 
         {/* ── 1. 대표 이미지 ── */}
         <HeroImage imageUrl={image_url} name={name} />
 
         {/* ── 2. 상세 정보 카드 ── */}
-        <Card>
-          <CardContent className="flex flex-col gap-6 pt-6">
+        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+          <div className="flex flex-col gap-6">
 
             {/* 집들이명 */}
-            <h1 className="text-2xl font-bold leading-snug tracking-tight text-foreground">
-              {name}
-            </h1>
+            <div className="flex flex-col gap-2">
+              {organization && (
+                <span className="inline-flex w-fit items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  {organization}
+                </span>
+              )}
+              <h1 className="font-heading text-2xl font-bold leading-snug tracking-tight text-foreground">
+                {name}
+              </h1>
+            </div>
+
+            {/* 구분선 */}
+            <div className="h-px bg-border/60" aria-hidden="true" />
 
             {/* 상세 정보 행 목록 */}
-            <div className="flex flex-col gap-4">
-
-              {/* 편성 — null이면 렌더링 생략 */}
-              {organization && (
-                <DetailRow
-                  icon={
-                    <Building2
-                      className="size-4"
-                      strokeWidth={1.75}
-                      aria-hidden="true"
-                    />
-                  }
-                  label="편성"
-                >
-                  {organization}
-                </DetailRow>
-              )}
+            <div className="flex flex-col gap-5">
 
               {/* 일시 — 항상 표시 */}
               <DetailRow
@@ -384,17 +381,17 @@ export function HousewarmingDetailView({
               )}
             </div>
 
-            {/* 상세 설명 — null이면 렌더링 생략, 줄바꿈 유지 */}
+            {/* 상세 설명 — null이면 렌더링 생략 */}
             {description && (
-              <div className="border-t pt-4">
-                <p className="whitespace-pre-line text-sm leading-relaxed text-foreground">
+              <div className="rounded-xl bg-muted/50 px-4 py-4 border border-border/40">
+                <p className="whitespace-pre-line text-sm leading-relaxed text-foreground/80">
                   {description}
                 </p>
               </div>
             )}
 
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* ── 3. 캘린더에 추가 ── */}
         <AddToCalendar housewarming={housewarming} />
@@ -405,14 +402,19 @@ export function HousewarmingDetailView({
             href={kakao_open_chat_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] py-3.5 text-base font-semibold text-[#191600] transition-opacity hover:opacity-90"
+            className={cn(
+              "flex w-full items-center justify-center gap-2 rounded-xl py-3.5",
+              "text-base font-semibold text-[#191600]",
+              "bg-[#FEE500] hover:bg-[#FADA0A]",
+              "transition-colors duration-200 shadow-sm"
+            )}
           >
             <MessageCircle className="size-5" strokeWidth={2} aria-hidden="true" />
             카카오톡 오픈채팅 참여하기
           </a>
         )}
 
-        {/* ── 4. 참여 버튼 영역 ── */}
+        {/* ── 5. 참여 버튼 영역 ── */}
         <ParticipationSection
           status={status}
           busy={busy}
@@ -421,12 +423,10 @@ export function HousewarmingDetailView({
           onChange={onChange}
         />
 
-        {/* ── 4. 참여자 목록 ── */}
-        <Card>
-          <CardContent className="pt-6">
-            <ParticipantList participants={participants} />
-          </CardContent>
-        </Card>
+        {/* ── 6. 참여자 목록 ── */}
+        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+          <ParticipantList participants={participants} />
+        </div>
 
       </div>
     </main>

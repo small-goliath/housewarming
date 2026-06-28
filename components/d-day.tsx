@@ -23,25 +23,31 @@ export function DDay() {
 
   const sublabel =
     days > 0
-      ? `집들이까지 ${days}일 남았어요 🗓️`
+      ? `집들이까지 ${days}일 남았어요`
       : days === 0
-        ? "오늘이 바로 그 날! 🎉"
-        : `집들이가 ${Math.abs(days)}일 지났어요 🥲`;
+        ? "오늘이 바로 그 날!"
+        : `집들이가 ${Math.abs(days)}일 지났어요`;
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <p className="text-sm font-medium tracking-widest text-white/70 uppercase">
+    /* D-Day 컨테이너 — 글래스모피즘 느낌의 반투명 패널 */
+    <div className="flex flex-col items-center gap-3">
+      {/* 날짜 레이블 — 트래킹 넓게 */}
+      <p className="text-xs font-medium tracking-[0.25em] text-white/55 uppercase">
         2027 · 10 · 31
       </p>
+
+      {/* D-Day 숫자 — 세리프 폰트로 우아하게 */}
       <p
-        className="text-6xl font-black tracking-tight text-white drop-shadow-lg sm:text-7xl md:text-8xl"
+        className="font-heading text-7xl font-bold tracking-tight text-white drop-shadow-lg sm:text-8xl md:text-9xl"
         aria-label={`디데이 ${label}`}
       >
         {label}
       </p>
-      <p className="text-sm text-white/80 drop-shadow sm:text-base">
+
+      {/* 서브레이블 — 반투명 캡슐 배경 */}
+      <span className="inline-flex items-center rounded-full bg-white/15 px-4 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm sm:text-sm">
         {sublabel}
-      </p>
+      </span>
     </div>
   );
 }
