@@ -33,6 +33,13 @@ export interface GuestbookEntry {
   id: string;
   content: string;
   created_at: string; // ISO UTC
+  like_count: number;
+  liked: boolean;
+}
+
+export interface LikeResponse {
+  liked: boolean;
+  like_count: number;
 }
 
 export interface GuestbookListResponse {

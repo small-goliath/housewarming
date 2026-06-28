@@ -3,9 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { apiJson } from "@/lib/api";
+import { apiFetch, apiJson } from "@/lib/api";
 import { formatDateTimeKST } from "@/lib/datetime";
-import type { GuestbookEntry, GuestbookListResponse } from "@/lib/types";
+import type {
+  GuestbookEntry,
+  GuestbookListResponse,
+  LikeResponse,
+} from "@/lib/types";
 import {
   GuestbookView,
   type GuestbookViewEntry,
@@ -21,6 +25,8 @@ export default function GuestbookPage() {
     id: e.id,
     content: e.content,
     dateLabel: formatDateTimeKST(e.created_at),
+    likeCount: e.like_count,
+    liked: e.liked,
   });
 
   const loadEntries = useCallback(async () => {
@@ -56,12 +62,65 @@ export default function GuestbookPage() {
     }
   }, []);
 
+  const onToggleLike = useCallback(
+    async (id: string) => {
+      const target = entries.find((e) => e.id === id);
+      if (!target) return;
+      const nextLiked = !target.liked;
+
+      // 낙관적 업데이트
+      setEntries((prev) =>
+        prev.map((e) =>
+          e.id === id
+            ? {
+                ...e,
+                liked: nextLiked,
+                likeCount: e.likeCount + (nextLiked ? 1 : -1),
+              }
+            : e,
+        ),
+      );
+
+      try {
+        const res = await apiFetch(`/api/guestbook/${id}/like`, {
+          method: nextLiked ? "POST" : "DELETE",
+        });
+        if (!res.ok) throw new Error();
+        const data: LikeResponse = await res.json();
+        // 서버 실제 값으로 동기화
+        setEntries((prev) =>
+          prev.map((e) =>
+            e.id === id
+              ? { ...e, liked: data.liked, likeCount: data.like_count }
+              : e,
+          ),
+        );
+      } catch {
+        // 실패 시 롤백
+        setEntries((prev) =>
+          prev.map((e) =>
+            e.id === id
+              ? {
+                  ...e,
+                  liked: target.liked,
+                  likeCount: target.likeCount,
+                }
+              : e,
+          ),
+        );
+        toast.error("좋아요 처리에 실패했습니다.");
+      }
+    },
+    [entries],
+  );
+
   return (
     <GuestbookView
       entries={entries}
       loading={loading}
       submitting={submitting}
       onSubmit={onSubmit}
+      onToggleLike={onToggleLike}
     />
   );
 }

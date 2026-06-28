@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, MessageCircle } from "lucide-react";
+import { Clock, Heart, MessageCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,8 @@ export interface GuestbookViewEntry {
   id: string;
   content: string;
   dateLabel: string; // 이미 KST로 포맷된 날짜 문자열 (예: "2026.06.23 14:30")
+  likeCount: number;
+  liked: boolean;
 }
 
 // 방명록 뷰 컴포넌트 props 타입 정의
@@ -26,6 +28,7 @@ export interface GuestbookViewProps {
   loading: boolean;    // 목록 로딩 중
   submitting: boolean; // 작성 요청 처리 중
   onSubmit: (content: string) => Promise<void>; // 작성 제출. 성공 시 resolve, 실패 시 throw.
+  onToggleLike: (id: string) => void; // 좋아요 토글
 }
 
 /**
@@ -38,6 +41,7 @@ export function GuestbookView({
   loading,
   submitting,
   onSubmit,
+  onToggleLike,
 }: GuestbookViewProps) {
   // textarea 입력값 상태 관리
   const [content, setContent] = useState("");
@@ -163,10 +167,33 @@ export function GuestbookView({
                       {entry.content}
                     </p>
 
-                    {/* 날짜 (작성자 정보 없음 — 완전 익명) */}
-                    <div className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="size-3" aria-hidden="true" />
-                      <time>{entry.dateLabel}</time>
+                    {/* 날짜 + 좋아요 (작성자 정보 없음 — 완전 익명) */}
+                    <div className="mt-3 flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="size-3" aria-hidden="true" />
+                        <time>{entry.dateLabel}</time>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => onToggleLike(entry.id)}
+                        aria-pressed={entry.liked}
+                        aria-label={entry.liked ? "좋아요 취소" : "좋아요"}
+                        className={cn(
+                          "flex items-center gap-1 rounded-full px-2 py-1 text-xs transition-colors",
+                          entry.liked
+                            ? "text-red-500"
+                            : "text-muted-foreground hover:text-red-500"
+                        )}
+                      >
+                        <Heart
+                          className={cn("size-4", entry.liked && "fill-current")}
+                          aria-hidden="true"
+                        />
+                        {entry.likeCount > 0 && (
+                          <span className="tabular-nums">{entry.likeCount}</span>
+                        )}
+                      </button>
                     </div>
                   </CardContent>
                 </Card>
