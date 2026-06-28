@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { AddToCalendar } from "@/components/add-to-calendar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -395,7 +396,10 @@ export function HousewarmingDetailView({
           </CardContent>
         </Card>
 
-        {/* ── 3. 카카오 오픈채팅 버튼 (URL 있을 때만) ── */}
+        {/* ── 3. 캘린더에 추가 ── */}
+        <AddToCalendar housewarming={housewarming} />
+
+        {/* ── 4. 카카오 오픈채팅 버튼 (URL 있을 때만) ── */}
         {kakao_open_chat_url && (
           <a
             href={kakao_open_chat_url}
